@@ -26,7 +26,7 @@ void Door::draw() {
   glPushAttrib(GL_CURRENT_BIT);
   glPushAttrib(GL_POLYGON_BIT);
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-  glColor3f(1.0, 0.0, 0.0);
+  glColor3f(0.04, 0.37, 0.37);
   glBegin(GL_QUADS);
     glVertex3f(topLeft[0], topLeft[1], topLeft[2]);
     glVertex3f(topLeft[0], topLeft[1] - height, topLeft[2]);
