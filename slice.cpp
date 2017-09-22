@@ -12,12 +12,18 @@ A model of one part, replicable of Kenarden Lodge. Intended for use in construct
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #include <GLUT/glut.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "colors.h"
 #include "window.h"
 #include "smallWindow.h"
 #include "door.h"
 #include "dormer.h"
 #include "smallDormer.h"
+
+static int moving = 0, startx = 0, starty = 0;
+static GLfloat angle = -150;
+static GLfloat angle2 = 30;
 
 void drawBase(GLenum mode);
 void drawRoof(GLenum mode);
@@ -42,6 +48,8 @@ void myDisplay() {
   glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
   glClearDepth(1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  // glRotatef(angle2, 1.0, 0.0, 0.0);
+  glRotatef(angle, 0.0, 0.5, 0.0);
 
   drawGuides();
   drawGrass();
@@ -353,6 +361,43 @@ void myinit() {
 
 
 }
+//Quites the program using q key
+void Keyboard (unsigned char key, int x, int y){
+
+  #pragma unsued (x,y);
+
+  switch (key){
+      case 'q':
+      exit (0);
+      break;
+  }
+}
+//Rotating with Left Button on Mouse
+static void mouse (int button, int state, int x, int y)
+{
+if (button == GLUT_LEFT_BUTTON){
+  if (state == GLUT_DOWN){
+    moving = 1;
+    startx = x;
+    starty = y;
+    }
+    if (state == GLUT_UP){
+      moving = 0;
+    }
+}
+}
+
+static void motion (int x, int y)
+{
+  if(moving){
+    angle = (angle + ( x - startx));
+    angle2 = (angle2 + (y - starty));
+    startx = x;
+    starty = y;
+    glutPostRedisplay();
+   }
+}
+
 
 int main(int argc, char **argv) {
   glutInit(&argc, argv);
@@ -360,6 +405,9 @@ int main(int argc, char **argv) {
   glutInitWindowSize(500, 500);
   glutCreateWindow("Knard");
   glutDisplayFunc(myDisplay);
+  glutKeyboardFunc(Keyboard);
+  glutMouseFunc(mouse);
+  glutMotionFunc(motion);
   myinit();
   glutMainLoop();
 }
